@@ -1,0 +1,49 @@
+html, body {
+  height: 100%;
+}
+
+body > .container {
+  height: 100%;
+  padding: 80px 15px 0;
+}
+
+.nav { }
+.nav li a.active {
+  font-weight: bold;
+}
+
+section.app {
+  display: none;
+  height: 100%;
+}
+section.app:first-of-type {
+  display: block;
+}
+
+#md-editor { }
+#md-editor .output {
+  overflow: scroll;
+  padding: 5px;
+  border: 1px solid lightGrey;
+  border-radius: 3px;
+}
+#md-editor .output h1,
+#md-editor .output h2,
+#md-editor .output h3,
+#md-editor .output h4,
+#md-editor .output h5,
+#md-editor .output h6,
+#md-editor .output p {
+  margin: 3px;
+  padding: 0;
+}
+
+#json-tools { }
+#json-tools .error {
+  color: red;
+}
+
+#base64-tools { }
+#base64-tools .error {
+  color: red;
+}

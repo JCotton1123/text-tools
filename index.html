@@ -2,15 +2,13 @@
 <html lang="en-US">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Text Tools | JC</title>
-  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-  <style>
-    body > .container {
-      padding: 60px 15px 0;
-    }
-  </style>
-  <script src="//cdn.jsdelivr.net/json-minify/0.1/minify.json.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="In-browser, client-side text tools." />
+  <meta name="keywords" content="text, tools, markdown, json, regex, base64" />
+  <meta author="Jesse Cotton" />
+  <title>Text Tools</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -22,33 +20,50 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Text Tools</a>
+      <a class="navbar-brand" href="/">Text Tools</a>
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="#json-tools">JSON Tools</a></li>
-        <li><a href="#regex-tools">RegEx Tools</a></li>
+        <li><a class="active" data-app="md-editor" href="#">Markdown Editor</a></li>
+        <li><a data-app="json-tools" href="#">JSON Tools</a></li>
+        <li><a data-app="regex-tools" href="#">RegEx Tools</a></li>
+        <li><a data-app="base64-tools" href="#">Base64 Tools</a></li>
       </ul>
     </div>
   </div>
 </div>
-
 <div class="container">
-  <section id="json-tools" class="app json-tools">
-    <h2>JSON Tools</h2>
+  <section id="md-editor" class="app md-editor">
     <form role="role">
-      <div class="form-group">
-        <textarea class="result form-control" placeholder="Result" readonly></textarea>
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <textarea class="input form-control">## Markdown Editor</textarea>
+        </div>
+        <div class="col-md-6">
+          <div class="output"></div>
+        </div>
       </div>
-      <div class="form-group">
-        <textarea class="json form-control" placeholder="Input..."></textarea>
-      </div>
-      <a class="btn btn-default make-pretty">Make pretty</a>
-      <a class="btn btn-default minify">Minify</a>
     </form>
   </section>
+
+  <section id="json-tools" class="app json-tools">
+    <form role="role">
+      <div class="row">
+        <div class="col-md-12 form-group">
+          <textarea class="json form-control" placeholder="Input..."></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <a class="btn btn-default make-pretty">Prettify</a>
+          <a class="btn btn-default minify">Minify</a>
+          <span class="error"></span>
+        </div>
+      </div>
+    </form>
+  </section>
+
   <section id="regex-tools" class="app regex-tools">
-    <h2>Regex Tools</h2>
     <form role="form">
       <div class="form-group">
         <textarea class="result form-control" placeholder="Result" readonly></textarea>
@@ -59,7 +74,11 @@
       <div class="row">
         <div class="col-md-8">
           <div class="form-group">
+          <div class="input-group">
+            <div class="input-group-addon">/</div>
             <input type="text" name="regex" class="regex run form-control" placeholder="regex..." />
+            <div class="input-group-addon">/</div>
+          </div>
           </div>
         </div>
         <div class="col-md-4">
@@ -70,57 +89,30 @@
       </div>
     </form>
   </section>
+
+  <section id="base64-tools" class="app base64-tools">
+    <form role="role">
+      <div class="row">
+        <div class="col-md-12 form-group">
+          <textarea class="base64 form-control" placeholder="Input..."></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <a class="btn btn-default encode">Encode</a>
+          <a class="btn btn-default decode">Decode</a>
+          <span class="error"></span>
+        </div>
+      </div>
+    </form>
+  </section>
 </div><!-- /.container -->
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<script>
-$(document).ready(function(){
-
-  /* JSON Tools App */
-  $('.app.json-tools .btn.make-pretty').on('click', function(event){
-    var text = $('.app.json-tools textarea.json').val();
-    var json = {};
-    try {
-      json = JSON.parse(text);
-    }
-    catch(exception) {
-      json = exception.message;
-    }
-    $('.app.json-tools .result').val(JSON.stringify(json, null, 2));
-  });
-  $('.app.json-tools .btn.minify').on('click', function(event){
-    var text = $('.app.json-tools textarea.json').val();
-    var json = {};
-    try {
-      json = JSON.parse(JSON.minify(text));
-    }
-    catch(exception){
-      json = exception.message;
-    }
-    $(".app.json-tools .result").val(JSON.stringify(json));
-  });
-
-  /* Regex Tools App */
-  $('.app.regex-tools .run').on('keyup', function(event){
-    var input = $('.app.regex-tools .input').val();
-    var reTxt = $('.app.regex-tools .regex').val();
-    var flagsTxt = $('.app.regex-tools .flags').val();
-    try {
-      var re = new RegExp(reTxt, flagsTxt);
-    }
-    catch(err){
-      return;
-    }
-    var result = re.exec(input);
-    if(result != null){
-      $('.app.regex-tools .result').val(result.toString());
-    }
-    else {
-      $('.app.regex-tools .result').val("");
-    }
-  });
-});
-</script>
+<script src="js/minify.json.js"></script>
+<script src="js/base64.js"></script>
+<script src="js/marked.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
